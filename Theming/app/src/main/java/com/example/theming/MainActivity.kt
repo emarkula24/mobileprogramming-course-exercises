@@ -55,7 +55,7 @@ fun MyApp(modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {/*TODO*/},
-            modifier = appModifier
+            modifier = appModifier,
         ) {
             Text("Submit")
         }
