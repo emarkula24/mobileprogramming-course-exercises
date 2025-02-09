@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VmmBmiCalculator</string>
+    <string name="body_mass_index">Bmi calculator\n</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="result">"Your bmi is "</string>
+</resources>
