@@ -29,3 +29,6 @@ interface TodosApi {
     }
 }
 
+data class Success(val todos: List<Todo>)
+
+

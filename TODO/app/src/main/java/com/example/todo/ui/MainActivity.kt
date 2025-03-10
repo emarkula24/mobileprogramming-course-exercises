@@ -14,11 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.todo.ui.theme.TODOTheme
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todo.model.Todo
+import com.example.todo.viewmodel.TodoUiState
 import com.example.todo.viewmodel.TodoViewModel
 
 
@@ -28,20 +31,46 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TODOTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TodoScreen(modifier = Modifier.padding(innerPadding))
-
+                TodoApp()
                 }
             }
         }
     }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TodoApp(todoViewModel: TodoViewModel = viewModel()) {
+    Scaffold (
+        topBar = {
+            TopAppBar(
+                title={Text("Todos")}
+            )
+        }
+    )
+    { innerPadding ->
+        TodoScreen(Modifier.padding(innerPadding),todoViewModel.todoUiState)
+    }
 }
 
 @Composable
-fun TodoScreen(modifier: Modifier = Modifier, todoViewModel: TodoViewModel =
-viewModel())  {
-    TodoList(modifier, todoViewModel.todos)
+fun TodoScreen(modifier: Modifier, uiState: TodoUiState) {
+    when (uiState) {
+        is TodoUiState.Loading -> LoadingScreen()
+        is TodoUiState.Success -> TodoList(modifier,uiState.todos)
+        is TodoUiState.Error -> ErrorScreen()
     }
+}
+
+@Composable
+fun LoadingScreen() {
+    Text("Loading...")
+}
+
+@Composable
+fun ErrorScreen() {
+    Text("Error retrieving data from API.")
+}
 
 @Composable
 fun TodoList(modifier: Modifier = Modifier, todos: List<Todo>) {
@@ -63,6 +92,6 @@ fun TodoList(modifier: Modifier = Modifier, todos: List<Todo>) {
 @Composable
 fun TodoPreview() {
     TODOTheme {
-        TodoScreen()
+        TodoApp()
     }
 }
